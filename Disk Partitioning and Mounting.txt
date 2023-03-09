@@ -1,0 +1,270 @@
+#make sure that you elevate privileges and check for any existing physical or logical volumes
+>> sudo sudo
+
+#check the linux flavour to determine which package manager you will use to install the necessary packages
+
+[root@centos-host bob]# cat /etc/os-release
+NAME="CentOS Linux"
+VERSION="8"
+ID="centos"
+ID_LIKE="rhel fedora"
+VERSION_ID="8"
+PLATFORM_ID="platform:el8"
+PRETTY_NAME="CentOS Linux 8"
+ANSI_COLOR="0;31"
+CPE_NAME="cpe:/o:centos:centos:8"
+HOME_URL="https://centos.org/"
+BUG_REPORT_URL="https://bugs.centos.org/"
+CENTOS_MANTISBT_PROJECT="CentOS-8"
+CENTOS_MANTISBT_PROJECT_VERSION="8"
+[root@centos-host bob]# yum install -y lvm2
+Last metadata expiration check: 0:04:39 ago on Thu 09 Mar 2023 12:09:59 AM UTC.
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Dependencies resolved.
+=========================================================================================================================================
+ Package                                        Architecture            Version                            Repository               Size
+=========================================================================================================================================
+Installing:
+ lvm2                                           x86_64                  8:2.03.12-10.el8                   baseos                  1.6 M
+Upgrading:
+ device-mapper                                  x86_64                  8:1.02.177-10.el8                  baseos                  377 k
+ device-mapper-libs                             x86_64                  8:1.02.177-10.el8                  baseos                  409 k
+Installing dependencies:
+ device-mapper-event                            x86_64                  8:1.02.177-10.el8                  baseos                  271 k
+ device-mapper-event-libs                       x86_64                  8:1.02.177-10.el8                  baseos                  270 k
+ device-mapper-persistent-data                  x86_64                  0.9.0-4.el8                        baseos                  925 k
+ libaio                                         x86_64                  0.3.112-1.el8                      baseos                   33 k
+ lvm2-libs                                      x86_64                  8:2.03.12-10.el8                   baseos                  1.2 M
+
+Transaction Summary
+=========================================================================================================================================
+Install  6 Packages
+Upgrade  2 Packages
+
+Total download size: 5.0 M
+Downloading Packages:
+(1/8): device-mapper-event-libs-1.02.177-10.el8.x86_64.rpm                                               1.4 MB/s | 270 kB     00:00    
+(2/8): device-mapper-persistent-data-0.9.0-4.el8.x86_64.rpm                                              4.5 MB/s | 925 kB     00:00    
+(3/8): device-mapper-event-1.02.177-10.el8.x86_64.rpm                                                    1.3 MB/s | 271 kB     00:00    
+(4/8): libaio-0.3.112-1.el8.x86_64.rpm                                                                   1.2 MB/s |  33 kB     00:00    
+(5/8): lvm2-libs-2.03.12-10.el8.x86_64.rpm                                                                20 MB/s | 1.2 MB     00:00    
+(6/8): lvm2-2.03.12-10.el8.x86_64.rpm                                                                     24 MB/s | 1.6 MB     00:00    
+(7/8): device-mapper-1.02.177-10.el8.x86_64.rpm                                                          7.1 MB/s | 377 kB     00:00    
+(8/8): device-mapper-libs-1.02.177-10.el8.x86_64.rpm                                                      11 MB/s | 409 kB     00:00    
+-----------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                     17 MB/s | 5.0 MB     00:00     
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                 1/1 
+  Installing       : libaio-0.3.112-1.el8.x86_64                                                                                    1/10 
+  Upgrading        : device-mapper-libs-8:1.02.177-10.el8.x86_64                                                                    2/10 
+  Upgrading        : device-mapper-8:1.02.177-10.el8.x86_64                                                                         3/10 
+  Installing       : device-mapper-event-libs-8:1.02.177-10.el8.x86_64                                                              4/10 
+  Installing       : device-mapper-event-8:1.02.177-10.el8.x86_64                                                                   5/10 
+  Running scriptlet: device-mapper-event-8:1.02.177-10.el8.x86_64                                                                   5/10 
+  Installing       : lvm2-libs-8:2.03.12-10.el8.x86_64                                                                              6/10 
+  Installing       : device-mapper-persistent-data-0.9.0-4.el8.x86_64                                                               7/10 
+  Installing       : lvm2-8:2.03.12-10.el8.x86_64                                                                                   8/10 
+  Running scriptlet: lvm2-8:2.03.12-10.el8.x86_64                                                                                   8/10 
+  Cleanup          : device-mapper-8:1.02.171-5.el8.x86_64                                                                          9/10 
+  Cleanup          : device-mapper-libs-8:1.02.171-5.el8.x86_64                                                                    10/10 
+  Running scriptlet: device-mapper-libs-8:1.02.171-5.el8.x86_64                                                                    10/10 
+  Verifying        : device-mapper-event-8:1.02.177-10.el8.x86_64                                                                   1/10 
+  Verifying        : device-mapper-event-libs-8:1.02.177-10.el8.x86_64                                                              2/10 
+  Verifying        : device-mapper-persistent-data-0.9.0-4.el8.x86_64                                                               3/10 
+  Verifying        : libaio-0.3.112-1.el8.x86_64                                                                                    4/10 
+  Verifying        : lvm2-8:2.03.12-10.el8.x86_64                                                                                   5/10 
+  Verifying        : lvm2-libs-8:2.03.12-10.el8.x86_64                                                                              6/10 
+  Verifying        : device-mapper-8:1.02.177-10.el8.x86_64                                                                         7/10 
+  Verifying        : device-mapper-8:1.02.171-5.el8.x86_64                                                                          8/10 
+  Verifying        : device-mapper-libs-8:1.02.177-10.el8.x86_64                                                                    9/10 
+  Verifying        : device-mapper-libs-8:1.02.171-5.el8.x86_64                                                                    10/10 
+
+Upgraded:
+  device-mapper-8:1.02.177-10.el8.x86_64                           device-mapper-libs-8:1.02.177-10.el8.x86_64                          
+
+Installed:
+  device-mapper-event-8:1.02.177-10.el8.x86_64                       device-mapper-event-libs-8:1.02.177-10.el8.x86_64                  
+  device-mapper-persistent-data-0.9.0-4.el8.x86_64                   libaio-0.3.112-1.el8.x86_64                                        
+  lvm2-8:2.03.12-10.el8.x86_64                                       lvm2-libs-8:2.03.12-10.el8.x86_64                                  
+
+Complete!
+[root@centos-host bob]# rpm -qa | grep "lvm2"
+lvm2-libs-2.03.12-10.el8.x86_64
+lvm2-2.03.12-10.el8.x86_64
+[root@centos-host bob]# pvs
+[root@centos-host bob]# lvs
+[root@centos-host bob]# ^C
+[root@centos-host bob]# ^C
+[root@centos-host bob]# 
+[root@centos-host bob]# fdisk -l
+Disk /dev/vda: 11 GiB, 11811160064 bytes, 23068672 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0xef431952
+
+Device     Boot Start      End  Sectors Size Id Type
+/dev/vda1  *     2048 20971519 20969472  10G 83 Linux
+
+
+Disk /dev/vdb: 1 GiB, 1073741824 bytes, 2097152 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+
+Disk /dev/vdc: 1 GiB, 1073741824 bytes, 2097152 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+
+Disk /dev/vdd: 1 GiB, 1073741824 bytes, 2097152 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+
+Disk /dev/vde: 1 GiB, 1073741824 bytes, 2097152 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+[root@centos-host bob]# 
+
+[root@centos-host bob]# pvcreate /dev/vdb /dev/vdc
+  Physical volume "/dev/vdb" successfully created.
+  Physical volume "/dev/vdc" successfully created.
+[root@centos-host bob]# vgcreate dba_storage /dev/vdb /dev/vdc
+  Volume group "dba_storage" successfully created
+[root@centos-host bob]# vgdisplay
+  --- Volume group ---
+  VG Name               dba_storage
+  System ID             
+  Format                lvm2
+  Metadata Areas        2
+  Metadata Sequence No  1
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                0
+  Open LV               0
+  Max PV                0
+  Cur PV                2
+  Act PV                2
+  VG Size               1.99 GiB
+  PE Size               4.00 MiB
+  Total PE              510
+  Alloc PE / Size       0 / 0   
+  Free  PE / Size       510 / 1.99 GiB
+  VG UUID               0qy3Te-kjFH-SpZJ-NC4N-6VoK-65zl-EQTgzk
+   
+[root@centos-host bob]# 
+
+[root@centos-host bob]# lvcreate -n volume_1 -l 100%FREE dba_storage
+  Logical volume "volume_1" created.
+[root@centos-host bob]# lvdisplay
+  --- Logical volume ---
+  LV Path                /dev/dba_storage/volume_1
+  LV Name                volume_1
+  VG Name                dba_storage
+  LV UUID                HOFchI-2DGp-Gu0x-26Jq-cxwq-bc4e-AOmTYL
+  LV Write Access        read/write
+  LV Creation host, time centos-host, 2023-03-09 00:20:17 +0000
+  LV Status              available
+  # open                 0
+  LV Size                1.99 GiB
+  Current LE             510
+  Segments               2
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           252:0
+   
+[root@centos-host bob]# 
+
+[root@centos-host bob]# mkfs.xfs /dev/dba_storage/volume_1
+meta-data=/dev/dba_storage/volume_1 isize=512    agcount=4, agsize=130560 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=1, rmapbt=0
+         =                       reflink=1
+data     =                       bsize=4096   blocks=522240, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
+log      =internal log           bsize=4096   blocks=2560, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+[root@centos-host bob]# 
+[root@centos-host bob]#mkdir -p /mnt/dba_storage
+
+[root@centos-host bob]# lsblk
+NAME                   MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
+vda                    253:0    0  11G  0 disk 
+└─vda1                 253:1    0  10G  0 part /
+vdb                    253:16   0   1G  0 disk 
+└─dba_storage-volume_1 252:0    0   2G  0 lvm  
+vdc                    253:32   0   1G  0 disk 
+└─dba_storage-volume_1 252:0    0   2G  0 lvm  
+vdd                    253:48   0   1G  0 disk 
+vde                    253:64   0   1G  0 disk 
+[root@centos-host bob]# mount -t xfs /dev/dba_storage/volume_1 /mnt/dba_storage
+[root@centos-host bob]# 
+#the -t is used to denote the type and the  contents of /dev/dba_storage/volume_1 should now be accessible at the mount point /mnt/dba_storage
+
+[root@centos-host bob]# df -h
+Filesystem                        Size  Used Avail Use% Mounted on
+devtmpfs                          467M     0  467M   0% /dev
+tmpfs                             485M     0  485M   0% /dev/shm
+tmpfs                             485M  6.5M  479M   2% /run
+tmpfs                             485M     0  485M   0% /sys/fs/cgroup
+/dev/vda1                          10G  3.5G  6.6G  35% /
+tmpfs                              97M     0   97M   0% /run/user/0
+/dev/mapper/dba_storage-volume_1  2.0G   47M  2.0G   3% /mnt/dba_storage
+
+[root@centos-host bob]# nano /etc/fstab
+[root@centos-host bob]# cat /etc/fstab
+
+#
+# /etc/fstab
+# Created by anaconda on Fri Dec  4 17:37:32 2020
+#
+# Accessible filesystems, by reference, are maintained under '/dev/disk/'.
+# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info.
+#
+# After editing this file, run 'systemctl daemon-reload' to update systemd
+# units generated from this file.
+#
+UUID=a62c5b49-755e-41b0-9d36-de3d95e17232 /                       xfs     defaults        0 0
+/swapfile none swap defaults 0 0
+/dev/mapper/dba_storage-volume_1 /mnt/dba_storage xfs defaults 0 0
+#VAGRANT-BEGIN
+# The contents below are automatically generated by Vagrant. Do not modify.
+#VAGRANT-END
+[root@centos-host bob]# 
+
+[root@centos-host bob]# usermod -G dba_users bob
+[root@centos-host bob]# id bob
+uid=1002(bob) gid=1002(bob) groups=1002(bob),1003(dba_users)
+[root@centos-host bob]# ll -lsd /mnt/dba_storage/
+0 drwxr-xr-x. 2 root root 6 Mar  9 00:22 /mnt/dba_storage/
+[root@centos-host bob]# ls -lsd /mnt/dba_storage/
+0 drwxr-xr-x. 2 root root 6 Mar  9 00:22 /mnt/dba_storage/
+
+[root@centos-host bob]# chown :dba_users /mnt/dba_storage
+[root@centos-host bob]# ls -ld /mnt/dba_storage/
+drwxr-xr-x. 2 root dba_users 6 Mar  9 00:22 /mnt/dba_storage/
+[root@centos-host bob]# chmod 770 /mnt/dba_storage
+[root@centos-host bob]# ls -ld /mnt/dba_storage/
+drwxrwx---. 2 root dba_users 6 Mar  9 00:22 /mnt/dba_storage/
+[root@centos-host bob]# 
