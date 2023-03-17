@@ -131,6 +131,9 @@ Mar 14 01:15:08 centos-host firewalld[39681]: WARNING: AllowZoneDrifting is enab
 [root@centos-host bob]# 
 [root@centos-host bob]# 
 
+
+#the zone that you enable is the pubblic zone and with this it enables only the especific incoming ports that you enable
+
 [root@centos-host bob]#  firewall-cmd --zone=public --add-port=80/tcp --permanent
 success
 [root@centos-host bob]#  firewall-cmd --zone=public --add-port=8081/tcp --permanent
@@ -141,6 +144,8 @@ success
 
 [root@centos-host bob]# firewall-cmd --reload
 success
+
+#the use of firewall-cmd --reload disconnects all existing connections
 [root@centos-host bob]#  firewall-cmd --list-all
 public
   target: default
@@ -157,3 +162,200 @@ public
   icmp-blocks: 
   rich rules: 
   
+  
+  
+[root@centos-host bob]# pushd /home/bob/go-app
+/home/bob/go-app /home/bob
+[root@centos-host go-app]# dirs -v
+ 0  /home/bob/go-app
+ 1  /home/bob
+[root@centos-host go-app]# nohup go run main.go &
+[1] 37805
+[root@centos-host go-app]# nohup: ignoring input and appending output to 'nohup.out'
+
+grep the particular pid
+
+[root@centos-host go-app]# ps -ef | grep 37805
+root       37805   31586  0 00:57 pts/0    00:00:11 go run main.go
+root       40984   37805  0 00:58 pts/0    00:00:00 /tmp/go-build858830961/b001/exe/main
+root       41035   31586  0 01:00 pts/0    00:00:00 grep --color=auto 37805
+[root@centos-host go-app]# 
+
+[root@centos-host go-app]# yum -y install nginx
+Last metadata expiration check: 0:42:47 ago on Fri Mar 17 00:21:38 2023.
+Dependencies resolved.
+=========================================================================================================================================
+ Package                                Architecture      Version                                             Repository            Size
+=========================================================================================================================================
+Installing:
+ nginx                                  x86_64            1:1.14.1-9.module_el8.0.0+1060+3ab382d3             appstream            570 k
+Installing dependencies:
+ nginx-all-modules                      noarch            1:1.14.1-9.module_el8.0.0+1060+3ab382d3             appstream             23 k
+ nginx-filesystem                       noarch            1:1.14.1-9.module_el8.0.0+1060+3ab382d3             appstream             24 k
+ nginx-mod-http-image-filter            x86_64            1:1.14.1-9.module_el8.0.0+1060+3ab382d3             appstream             35 k
+ nginx-mod-http-perl                    x86_64            1:1.14.1-9.module_el8.0.0+1060+3ab382d3             appstream             46 k
+ nginx-mod-http-xslt-filter             x86_64            1:1.14.1-9.module_el8.0.0+1060+3ab382d3             appstream             33 k
+ nginx-mod-mail                         x86_64            1:1.14.1-9.module_el8.0.0+1060+3ab382d3             appstream             64 k
+ nginx-mod-stream                       x86_64            1:1.14.1-9.module_el8.0.0+1060+3ab382d3             appstream             85 k
+Enabling module streams:
+ nginx                                                    1.14                                                                          
+
+Transaction Summary
+=========================================================================================================================================
+Install  8 Packages
+
+Total download size: 880 k
+Installed size: 2.0 M
+Downloading Packages:
+(1/8): nginx-filesystem-1.14.1-9.module_el8.0.0+1060+3ab382d3.noarch.rpm                                 403 kB/s |  24 kB     00:00    
+(2/8): nginx-all-modules-1.14.1-9.module_el8.0.0+1060+3ab382d3.noarch.rpm                                277 kB/s |  23 kB     00:00    
+(3/8): nginx-mod-http-image-filter-1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64.rpm                      724 kB/s |  35 kB     00:00    
+(4/8): nginx-mod-http-perl-1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64.rpm                              958 kB/s |  46 kB     00:00    
+(5/8): nginx-mod-http-xslt-filter-1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64.rpm                       661 kB/s |  33 kB     00:00    
+(6/8): nginx-mod-mail-1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64.rpm                                   1.2 MB/s |  64 kB     00:00    
+(7/8): nginx-mod-stream-1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64.rpm                                 1.6 MB/s |  85 kB     00:00    
+(8/8): nginx-1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64.rpm                                            2.3 MB/s | 570 kB     00:00    
+-----------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                    1.9 MB/s | 880 kB     00:00     
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                 1/1 
+  Running scriptlet: nginx-filesystem-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.noarch                                                 1/8 
+warning: Unable to get systemd shutdown inhibition lock: Unit systemd-logind.service is masked.
+
+  Installing       : nginx-filesystem-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.noarch                                                 1/8 
+  Installing       : nginx-mod-http-image-filter-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                      2/8 
+  Running scriptlet: nginx-mod-http-image-filter-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                      2/8 
+  Installing       : nginx-mod-http-perl-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                              3/8 
+  Running scriptlet: nginx-mod-http-perl-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                              3/8 
+  Installing       : nginx-mod-http-xslt-filter-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                       4/8 
+  Running scriptlet: nginx-mod-http-xslt-filter-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                       4/8 
+  Installing       : nginx-mod-mail-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                                   5/8 
+  Running scriptlet: nginx-mod-mail-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                                   5/8 
+  Installing       : nginx-all-modules-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.noarch                                                6/8 
+  Installing       : nginx-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                                            7/8 
+  Running scriptlet: nginx-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                                            7/8 
+  Installing       : nginx-mod-stream-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                                 8/8 
+  Running scriptlet: nginx-mod-stream-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                                 8/8 
+  Verifying        : nginx-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                                            1/8 
+  Verifying        : nginx-all-modules-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.noarch                                                2/8 
+  Verifying        : nginx-filesystem-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.noarch                                                 3/8 
+  Verifying        : nginx-mod-http-image-filter-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                      4/8 
+  Verifying        : nginx-mod-http-perl-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                              5/8 
+  Verifying        : nginx-mod-http-xslt-filter-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                       6/8 
+  Verifying        : nginx-mod-mail-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                                   7/8 
+  Verifying        : nginx-mod-stream-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                                 8/8 
+
+Installed:
+  nginx-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                                                                   
+  nginx-all-modules-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.noarch                                                                       
+  nginx-filesystem-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.noarch                                                                        
+  nginx-mod-http-image-filter-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                                             
+  nginx-mod-http-perl-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                                                     
+  nginx-mod-http-xslt-filter-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                                              
+  nginx-mod-mail-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                                                          
+  nginx-mod-stream-1:1.14.1-9.module_el8.0.0+1060+3ab382d3.x86_64                                                                        
+
+Complete!
+[root@centos-host go-app]# systemctl enable nginx
+Created symlink /etc/systemd/system/multi-user.target.wants/nginx.service → /usr/lib/systemd/system/nginx.service.
+[root@centos-host go-app]# 
+
+
+[root@centos-host go-app]# systemctl start nginx
+[root@centos-host go-app]# systemctl status nginx
+● nginx.service - The nginx HTTP and reverse proxy server
+   Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; vendor preset: disabled)
+   Active: active (running) since Fri 2023-03-17 01:05:23 UTC; 6s ago
+  Process: 43519 ExecStart=/usr/sbin/nginx (code=exited, status=0/SUCCESS)
+  Process: 43500 ExecStartPre=/usr/sbin/nginx -t (code=exited, status=0/SUCCESS)
+  Process: 43493 ExecStartPre=/usr/bin/rm -f /run/nginx.pid (code=exited, status=0/SUCCESS)
+ Main PID: 43533 (nginx)
+    Tasks: 37 (limit: 1340692)
+   Memory: 59.5M
+   CGroup: /system.slice/nginx.service
+           ├─43533 nginx: master process /usr/sbin/nginx
+           ├─43534 nginx: worker process
+           ├─43535 nginx: worker process
+           ├─43536 nginx: worker process
+           ├─43537 nginx: worker process
+           ├─43538 nginx: worker process
+           ├─43539 nginx: worker process
+           ├─43540 nginx: worker process
+           ├─43541 nginx: worker process
+           ├─43542 nginx: worker process
+           ├─43543 nginx: worker process
+           ├─43544 nginx: worker process
+lines 1-22
+[root@centos-host go-app]# ls -ltra /etc | grep nginx
+drwxr-xr-x 4 root root      4096 Mar 17 01:04 nginx
+[root@centos-host go-app]# nano /etc/nginx/nginx.conf
+
+# A reverse proxy is the recommended method to expose an application server to the internet
+#A reverse proxy is a server that sits in front of web servers and forwards client, e.g web browser, requests to those web servers
+
+[root@centos-host go-app]# nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+[root@centos-host go-app]# 
+
+the use of nginx -t is to run the test after the change in /etc/nginx/nginx.conf
+#on location proxy_pass configuration is what is used to enable the reverse proxy
+
+[root@centos-host go-app]# systemctl stop nginx
+[root@centos-host go-app]# systemctl start nginx
+[root@centos-host go-app]# systemctl status nginx
+● nginx.service - The nginx HTTP and reverse proxy server
+   Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; vendor preset: disabled)
+   Active: active (running) since Fri 2023-03-17 02:02:55 UTC; 23s ago
+  Process: 43458 ExecStart=/usr/sbin/nginx (code=exited, status=0/SUCCESS)
+  Process: 43438 ExecStartPre=/usr/sbin/nginx -t (code=exited, status=0/SUCCESS)
+  Process: 43431 ExecStartPre=/usr/bin/rm -f /run/nginx.pid (code=exited, status=0/SUCCESS)
+ Main PID: 43471 (nginx)
+    Tasks: 37 (limit: 1340692)
+   Memory: 54.7M
+   CGroup: /system.slice/nginx.service
+           ├─43471 nginx: master process /usr/sbin/nginx
+           ├─43472 nginx: worker process
+           ├─43473 nginx: worker process
+           ├─43474 nginx: worker process
+           ├─43475 nginx: worker process
+           ├─43476 nginx: worker process
+           ├─43477 nginx: worker process
+           ├─43478 nginx: worker process
+           ├─43479 nginx: worker process
+           ├─43480 nginx: worker process
+           ├─43481 nginx: worker process
+           ├─43482 nginx: worker process
+           ├─43483 nginx: worker process
+           ├─43484 nginx: worker process
+           ├─43485 nginx: worker process
+           ├─43486 nginx: worker process
+           ├─43487 nginx: worker process
+           ├─43488 nginx: worker process
+           ├─43489 nginx: worker process
+           ├─43490 nginx: worker process
+           ├─43491 nginx: worker process
+           ├─43492 nginx: worker process
+           ├─43493 nginx: worker process
+           ├─43494 nginx: worker process
+           ├─43495 nginx: worker process
+           ├─43496 nginx: worker process
+           ├─43497 nginx: worker process
+           ├─43498 nginx: worker process
+           ├─43499 nginx: worker process
+           ├─43500 nginx: worker process
+           ├─43501 nginx: worker process
+           ├─43502 nginx: worker process
+           ├─43503 nginx: worker process
+           ├─43504 nginx: worker process
+           ├─43505 nginx: worker process
+           ├─43506 nginx: worker process
+           └─43507 nginx: worker process
+
+Mar 17 02:02:55 centos-host nginx[43438]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+Mar 17 02:02:55 centos-host nginx[43438]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+[root@centos-host go-app]# 
