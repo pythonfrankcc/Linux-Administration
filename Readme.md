@@ -11,7 +11,8 @@ some of the existing disks on this server.
 7) Make sure that this mount point is persistent across reboots with the correct default options.
 8) Create a group called "dba_users" and add the user called 'bob' to this group
 9) Ensure that the mountpoint "/mnt/dba_storage" has the group ownership set to the "dba_users" group
-10) Ensure that the mount point "/mnt/dba_storage" has "read/write" and execute permissions for the owner and group and no permissions for anyone else
+10) Ensure that the mount point "/mnt/dba_storage" has "read/write" and execute permissions for the owner and group and no permissions 
+for anyone else
 
 
 *****************************************************************************************************************************************************
@@ -31,3 +32,28 @@ From clicking the icons found in the attached callenge2
 8) Start and Enable "firewalld" service
 9) Add firewall rules to allow only incoming port "22", "80" and "8081"
 10) The firewall rules must be permanent and effective immediately.
+
+*****************************************************************************************************************************************************
+Challenge3
+Some new developers have joined our team, so we need to create some users/groups and further need to setup some permissions 
+and access rights for them
+1) Creat a group called "devs"
+2) Create a user called "ray" , change his login shell to "/bin/sh" and set "D3vU3r321" password for this user
+3) Make user "ray" a member of "devs" group
+4) Create a user called "lisa", change her login shell to "/bin/sh" and set "D3vUd3r123" password for this user
+5) Make user "lisa" a member of "devs" group
+6) Make sure all users under "devs" group can only run the "dnf" command with "sudo" and without entering any password
+7) Edit the disk quota for the group called "devs". Limit the amount of storage space it can use (not inodes). Set a "soft" 
+limit of "100MB" and a "hard" limit of "500MB" on "/data" partition
+8) Configure a "resource limit" for the "devs" group so that this group (members of the group) can not run more than "30 processes"
+ in their session. This should be both a "hard limit" and a "soft limit", written in a single line
+9) Create a group called "admins"
+10) Create a user called "david" , change his login shell to "/bin/zsh" and set "D3vUd3raaw" password for this user
+11) Make user "david" a member of "admins" group
+12) Create a user called "natasha" , change her login shell to "/bin/zsh" and set "DwfawUd113" password for this user
+13) Make user "natasha" a member of "admins" grou
+14) Give some additional permissions to "admins" group on "/data" directory so that any user who is the member the 
+"admins" group has "full permissions" on this directory
+15) Make sure "/data" directory is owned by user "bob" and group "devs" and "user/group" owner has "full" permissions 
+but "other" should not have any permissions
+16) Make sure "/data" directory is owned by user "bob"

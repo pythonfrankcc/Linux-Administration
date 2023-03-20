@@ -1,0 +1,116 @@
+#start by elevating privileges and then adding the group admins and devs
+[bob@centos-host ~]$ sudo su
+[root@centos-host bob]# groupadd devs
+[root@centos-host bob]# groupadd admins
+[root@centos-host bob]# 
+
+#adding ray and lisa with sh as their login shell
+[root@centos-host bob]# useradd -s /bin/sh ray
+[root@centos-host bob]# useradd -s /bin/sh lisa
+[root@centos-host bob]# 
+
+#make ray and lisa part of the devs group
+[root@centos-host bob]# usermod -G devs ray
+[root@centos-host bob]# usermod -G devs lisa
+[root@centos-host bob]# 
+
+#verifying the same has been applied
+[root@centos-host bob]# cat /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/bin:/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/sbin/nologin
+adm:x:3:4:adm:/var/adm:/sbin/nologin
+lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin
+sync:x:5:0:sync:/sbin:/bin/sync
+shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
+halt:x:7:0:halt:/sbin:/sbin/halt
+mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
+operator:x:11:0:operator:/root:/sbin/nologin
+games:x:12:100:games:/usr/games:/sbin/nologin
+ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin
+nobody:x:65534:65534:Kernel Overflow User:/:/sbin/nologin
+dbus:x:81:81:System message bus:/:/sbin/nologin
+systemd-coredump:x:999:997:systemd Core Dumper:/:/sbin/nologin
+systemd-resolve:x:193:193:systemd Resolver:/:/sbin/nologin
+tss:x:59:59:Account used by the trousers package to sandbox the tcsd daemon:/dev/null:/sbin/nologin
+polkitd:x:998:996:User for polkitd:/:/sbin/nologin
+rpc:x:32:32:Rpcbind Daemon:/var/lib/rpcbind:/sbin/nologin
+unbound:x:997:993:Unbound DNS resolver:/etc/unbound:/sbin/nologin
+sssd:x:996:992:User for sssd:/:/sbin/nologin
+rpcuser:x:29:29:RPC Service User:/var/lib/nfs:/sbin/nologin
+chrony:x:995:991::/var/lib/chrony:/sbin/nologin
+sshd:x:74:74:Privilege-separated SSH:/var/empty/sshd:/sbin/nologin
+rngd:x:994:990:Random Number Generator Daemon:/var/lib/rngd:/sbin/nologin
+vagrant:x:1000:1000::/home/vagrant:/bin/bash
+admin:x:1001:1001::/home/admin:/bin/bash
+bob:x:1002:1002::/home/bob:/bin/bash
+ray:x:1003:1005::/home/ray:/bin/sh
+lisa:x:1004:1006::/home/lisa:/bin/sh
+[root@centos-host bob]# 
+
+[root@centos-host bob]# groups ray
+ray : ray devs
+[root@centos-host bob]# groups lisa
+lisa : lisa devs
+[root@centos-host bob]# id ray
+uid=1003(ray) gid=1005(ray) groups=1005(ray),1003(devs)
+[root@centos-host bob]# id lisa
+uid=1004(lisa) gid=1006(lisa) groups=1006(lisa),1003(devs)
+[root@centos-host bob]# id Gn ray
+id: extra operand ‘ray’
+Try 'id --help' for more information.
+[root@centos-host bob]# id -Gn ray
+ray devs
+[root@centos-host bob]# id -Gn lisa
+lisa devs
+[root@centos-host bob]# 
+
+#set ray and Lisa passwd
+[root@centos-host bob]# passwd ray
+Changing password for user ray.
+New password: 
+Retype new password: 
+passwd: all authentication tokens updated successfully.
+[root@centos-host bob]# passwd lisa
+Changing password for user lisa.
+New password: 
+Retype new password: 
+passwd: all authentication tokens updated successfully.
+[root@centos-host bob]# 
+
+#create users David and Natasha with zsh as their login shell and change passwd
+[root@centos-host bob]# useradd -s /bin/zsh david
+[root@centos-host bob]# useradd -s /bin/zsh natasha
+[root@centos-host bob]# passwd david
+Changing password for user david.
+New password: 
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password: 
+Sorry, passwords do not match.
+New password: 
+Retype new password: 
+passwd: all authentication tokens updated successfully.
+[root@centos-host bob]# 
+
+#add david and natasha to admins group
+[root@centos-host bob]# usermod -G admins david
+[root@centos-host bob]# usermod -G admins natasha
+[root@centos-host bob]# 
+
+#Make sure "/data" directory is owned by user "bob" and group "devs" and "user/group" owner has "full" 
+permissions but "other" should not have any permissions
+[root@centos-host bob]# ls -lsd /data
+0 drwxr-xr-x. 2 root root 6 Mar 20 00:44 /data
+[root@centos-host bob]# 
+
+[root@centos-host bob]# chown bob:devs /data
+[root@centos-host bob]# ls -lsd /data
+0 drwxr-xr-x. 2 bob devs 6 Mar 20 00:44 /data
+[root@centos-host bob]# 
+[root@centos-host bob]# chmod 770 /data
+[root@centos-host bob]# ls -lsd /data
+0 drwxrwx---. 2 bob devs 6 Mar 20 00:44 /data
+[root@centos-host bob]#
+
+#Give some additional permissions to "admins" group on "/data" directory so that any user who is the member the "admins" group 
+has "full permissions" on this directory
