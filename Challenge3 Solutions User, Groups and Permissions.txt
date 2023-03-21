@@ -114,3 +114,134 @@ permissions but "other" should not have any permissions
 
 #Give some additional permissions to "admins" group on "/data" directory so that any user who is the member the "admins" group 
 has "full permissions" on this directory
+#this can be implemented with the use of ACLs in linux as shown below
+[root@centos-host bob]# getfacl /data
+getfacl: Removing leading '/' from absolute path names
+# file: data
+# owner: bob
+# group: devs
+user::rwx
+group::rwx
+other::---
+
+[root@centos-host bob]# setfacl -m g:admins:rwx /data
+[root@centos-host bob]# getfacl /data
+getfacl: Removing leading '/' from absolute path names
+# file: data
+# owner: bob
+# group: devs
+user::rwx
+group::rwx
+group:admins:rwx
+mask::rwx
+other::---
+
+[root@centos-host bob]# 
+
+#next part is making sure that all the users under the devs group can only run the dnf command with sudo without entering the password
+#error occured
+[root@centos-host bob]# visudo /etc/sudoers
+visudo: /etc/sudoers busy, try again later
+
+#run the following
+#lsof means list open files
+lsof /etc/sudoers
+
+[root@centos-host bob]# lsof /etc/sudoers
+bash: lsof: command not found
+[root@centos-host bob]# ^C
+[root@centos-host bob]# yum install -y lsof
+Last metadata expiration check: 0:23:59 ago on Tue 21 Mar 2023 12:21:50 AM UTC.
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Dependencies resolved.
+=========================================================================================================================================
+ Package                      Architecture                   Version                                Repository                      Size
+=========================================================================================================================================
+Installing:
+ lsof                         x86_64                         4.93.2-1.el8                           baseos                         253 k
+
+Transaction Summary
+=========================================================================================================================================
+Install  1 Package
+
+Total download size: 253 k
+Installed size: 623 k
+Downloading Packages:
+lsof-4.93.2-1.el8.x86_64.rpm                                                                             1.4 MB/s | 253 kB     00:00    
+-----------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                    1.3 MB/s | 253 kB     00:00     
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                 1/1 
+  Installing       : lsof-4.93.2-1.el8.x86_64                                                                                        1/1 
+  Running scriptlet: lsof-4.93.2-1.el8.x86_64                                                                                        1/1 
+  Verifying        : lsof-4.93.2-1.el8.x86_64                                                                                        1/1 
+
+Installed:
+  lsof-4.93.2-1.el8.x86_64                                                                                                               
+
+Complete!
+[root@centos-host bob]# lsof /etc/sudoers
+COMMAND   PID USER   FD   TYPE DEVICE SIZE/OFF   NODE NAME
+visudo  23061 root    5uW  REG  253,1     4360 605933 /etc/sudoers
+
+#sudo -i
+#kill -9 23061
+
+
+[root@centos-host bob]# cat /etc/sudoers |grep dev
+%devs ALL=(ALL) NOPASSWD:/usr/bin/dnf
+[root@centos-host bob]# 
+
+#testing whether the sudoers config works
+[root@centos-host bob]# su ray
+sh-4.4$ pwd
+/home/bob
+sh-4.4$ whoami
+ray
+sh-4.4$ dnf install nano
+No read/execute access in current directory, moving to /
+Error: This command has to be run with superuser privileges (under the root user on most systems).
+sh-4.4$ sudo dnf install nano
+Last metadata expiration check: 0:42:17 ago on Tue 21 Mar 2023 12:21:50 AM UTC.
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Module yaml error: Unexpected key in data: static_context [line 9 col 3]
+Package nano-2.9.8-1.el8.x86_64 is already installed.
+Dependencies resolved.
+Nothing to do.
+Complete!
+sh-4.4$ ^C
+sh-4.4$ 
+
+#Edit the disk quota for the group called "devs". Limit the amount of storage space it can use (not inodes).
+#Set a "soft" limit of "100MB" and a "hard" limit of "500MB" on "/data" partition
+
+
+#Quotas enable the regulation and limitation of disk space usage on a system with multiple users which is useful in instances such as fileservers
+#soft limits declare how much space a user can use before being warned and ghaving a grace period applied, after which the quotas are enforced
+#Hard limits are the absolute amount of space a user can use. The user cannot supercede this limitation at all, regardless of the grace period
+#to enforce quotas you need the quota and quotatool packages
+#next you must add the usrquota and grpquota options in the /etc/fstab file on the entries where you wish to implement the quotas.
+#Then remount the filesystem
+#next create the necessary files quota.user and quota.group in /.
+#Run quotacheck to prepare the filesystem for quotas
+#log out then login then turn quota limits on by using the quotaon command
+
+
+#finally edit the quota limits for each user with: edquota -u userx
