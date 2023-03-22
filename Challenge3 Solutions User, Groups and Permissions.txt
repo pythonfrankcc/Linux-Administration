@@ -245,3 +245,44 @@ sh-4.4$
 
 
 #finally edit the quota limits for each user with: edquota -u userx
+
+#difference between pkill and kill in linux
+Kill requires jobid / process id for sending signals,where as in pkill u have an option of using pattern,specifying process owner,etc.
+Eg: pkill -signal TERM -u user1 AppServer
+
+#back to setting of quotas
+[bob@centos-host ~]$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        467M     0  467M   0% /dev
+tmpfs           485M     0  485M   0% /dev/shm
+tmpfs           485M  6.6M  478M   2% /run
+tmpfs           485M     0  485M   0% /sys/fs/cgroup
+/dev/vda1        10G  3.5G  6.6G  35% /
+/dev/vdb1      1017M   40M  978M   4% /data
+tmpfs            97M     0   97M   0% /run/user/0
+[bob@centos-host ~]$ 
+#the filesystem mounted to /data is /dev/vdb1
+
+[root@centos-host bob]# quota -g -s  devs /data
+Disk quotas for group devs (gid 1003): none
+quota: group /data does not exist.
+[root@centos-host bob]# 
+
+
+[root@centos-host bob]# setquota -g devs 100M 500M 0 0 /dev/vdb1
+[root@centos-host bob]# quota -g -s  devs /data
+Disk quotas for group devs (gid 1003): 
+     Filesystem   space   quota   limit   grace   files   quota   limit   grace
+      /dev/vdb1      0K    100M    500M               1       0       0        
+quota: group /data does not exist.
+[root@centos-host bob]# 
+
+#Configure a "resource limit" for the "devs" group so that this group (members of the group) can not run more than "30 processes" in their session. This should be both a "hard limit" and a "soft limit", 
+written in a single line
+#here you would edit the /etc/security/limits.conf
+
+
+[bob@centos-host ~]$ sudo su
+[root@centos-host bob]# cat /etc/security/limits.conf | grep devs
+@devs            -       nproc           30
+[root@centos-host bob]# 
