@@ -1,0 +1,94 @@
+#start with privilege elevation
+sudo su
+
+[root@centos-host bob]# ls -l /opt
+total 0
+
+#Make directories hidden & files under /opt/appdata
+[root@centos-host bob]# mkdir -p /opt/appdata/hidden
+[root@centos-host bob]# mkdir -p /opt/appdata/files
+[root@centos-host bob]# ls -l /opt/appdata/
+total 8
+drwxr-xr-x 2 root root 4096 Mar 24 00:25 files
+drwxr-xr-x 2 root root 4096 Mar 24 00:25 hidden
+[root@centos-host bob]# 
+
+#the use -p in the mkdir ensures the creation of a specific dir in the case that it is not there without having to do the mkdir xxxxx dir individually
+
+
+#Find the"non-hidden" files in "/home/bob/preserved" directory and copy them in "/opt/appdata/files/" directory
+[root@centos-host bob]# find /home/bob/preserved -type f -not -name ".*" -exec cp "{}" /opt/appdata/files/ \;
+[root@centos-host bob]# 
+The find /home/bob/preserved -type f -not -name ".*" -exec cp "{}" /opt/appdata/files/ \; command in Linux finds all regular files (not directories) 
+in the /home/bob/preserved directory (including any subdirectories), excluding any hidden files or directories whose names start with a dot ".". 
+It then copies each file it finds to the /opt/appdata/files/ directory using the cp command.
+
+Here's a breakdown of each part of the command:
+
+find: This is the command to search for files and directories.
+/home/bob/preserved: This is the starting directory for the search.
+-type f: This specifies that we are only interested in regular files (not directories, links, etc.).
+-not -name ".*": This tells find to exclude any files or directories whose names start with a dot ".". The "-" before "name" and the "not" before 
+the quotes together form a negation of the following expression, which means "exclude files or directories whose names match the pattern .*, where * 
+is any character or no character".
+-exec cp "{}" /opt/appdata/files/ \;: This tells find to execute the cp command on each file it finds. The "{}" is a placeholder for the name of the 
+file found by find. The semicolon (";") at the end of the command marks the end of the -exec option.
+So, in summary, this command finds all regular files (excluding hidden files and directories) in the /home/bob/preserved directory and copies each 
+file found to the /opt/appdata/files/ directory.
+
+
+#Find the "hidden" files in "/home/bob/preserved" directory and copy them in "/opt/appdata/hidden/" directory
+
+[root@centos-host bob]# find /home/bob/preserved -type f -name ".*" -exec cp "{}" /opt/appdata/hidden/ \;
+[root@centos-host bob]# 
+
+
+#Find and delete the files in "/opt/appdata" directory that contain a word ending with the letter "t" (case sensitive)
+[root@centos-host bob]# rm -f $(find /opt/appdata/ -type f -exec grep -l 't\>' "{}"  \; )
+[root@centos-host bob]# 
+
+
+The command rm -f $(find /opt/appdata/ -type f -exec grep -l 't\>' "{}" \; ) in Linux finds all regular files under the /opt/appdata/ 
+directory (including any subdirectories) that contain the word "t" as a separate word (i.e., not as part of another word), and deletes them 
+without prompting for confirmation. Here's a breakdown of each part of the command:
+
+rm: This is the command to remove (delete) files.
+-f: This option tells rm to force the removal of files without prompting for confirmation.
+$(): This is a command substitution that runs the command inside the parentheses and replaces it with its output.
+find /opt/appdata/: This is the starting directory for the search.
+-type f: This specifies that we are only interested in regular files (not directories, links, etc.).
+-exec grep -l 't\>' "{}" \;: This tells find to execute the grep command on each file it finds. The grep command searches for the pattern 't>', 
+which matches the letter "t" as a separate word (i.e., not as part of another word). The -l option tells grep to print only the names of the files 
+that contain the pattern. The "{}" is a placeholder for the name of the file found by find. The semicolon (";") at the end of the command marks the 
+end of the -exec option.
+The output of find and grep is passed to the command substitution $(), which returns a list of filenames that match the pattern.
+Finally, rm -f is used to delete all the files listed by the command substitution.
+So, in summary, this command finds all regular files under the /opt/appdata/ directory that contain the word "t" as a separate word and deletes 
+them without prompting for confirmation. Please note that this command can be destructive, so make sure to use it with caution.
+
+
+#the above code is actually wrong here is how you should go about it
+[root@centos-host bob]#find /opt/appdata/ -type f -exec grep -l '\<.*t\b' "{}" \; | xargs rm -f
+Here's what each part of the modified command does:
+
+find /opt/appdata/: This is the starting directory for the search.
+-type f: This specifies that we are only interested in regular files (not directories, links, etc.).
+-exec grep -l '\<.*t\b' "{}" \;: This tells find to execute the grep command on each file it finds. The grep command searches for the pattern 
+\<.*t\b, which matches any word ending with the letter "t". The \< and \b are word boundary markers that ensure that the "t" is at the end of a word. 
+The -l option tells grep to print only the names of the files that contain the pattern. The "{}" is a placeholder for the name of the file found by 
+find. The semicolon (";") at the end of the command marks the end of the -exec option.
+|: This is a pipe symbol that redirects the output of the grep command to the next command.
+xargs rm -f: This command takes the output of the grep command and uses it as input for the rm -f command, which removes (deletes) each file without 
+prompting for confirmation. The xargs command passes the output of the grep command as arguments to the rm command, allowing it to remove multiple 
+files in one go.
+With this modified command, you can find and delete all files in the /opt/appdata directory (including subdirectories) that contain a word ending 
+with the letter "t" (case-sensitive). Please use it with caution as it can be destructive.
+
+
+
+
+
+
+
+
+

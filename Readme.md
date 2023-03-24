@@ -57,3 +57,28 @@ limit of "100MB" and a "hard" limit of "500MB" on "/data" partition
 15) Make sure "/data" directory is owned by user "bob" and group "devs" and "user/group" owner has "full" permissions 
 but "other" should not have any permissions
 16) Make sure "/data" directory is owned by user "bob"
+
+
+****************************************************************************************************************************************************
+challenge4
+Some of our apps generate some raw data and store the same in /home/bob/preserved directory. We want to clean and manipulate some data and then 
+want to create an archive of that data
+
+1) Create a script called "/home/bob/filter.sh".
+2) Find the "hidden" files in "/home/bob/preserved" directory and copy them in "/opt/appdata/hidden/" directory (create the destination 
+directory if doesn't exist).
+3) Find the "non-hidden" files in "/home/bob/preserved" directory and copy them in "/opt/appdata/files/" directory (create the destination 
+directory if doesn't exist).
+4) Find and delete the files in "/opt/appdata" directory that contain a word ending with the letter "t" (case sensitive).
+5) Create a "softlink" called "/home/bob/appdata.tar.gz" of "/opt/appdata.tar.gz" file.
+6) Create a "tar.gz" archive of "/opt/appdata" directory and save the archive to this file: "/opt/appdata.tar.gz"
+7) The "appdata.tar.gz" archive should have the final processed data.
+8) Add the "sticky bit" special permission on "/opt/appdata" directory (keep the other permissions as it is).
+9) Make "bob" the "user" and the "group" owner of "/opt/appdata.tar.gz" file.
+10) The "user/group" owner should have "read only" permissions on "/opt/appdata.tar.gz" file and "others" should not have any permissions.
+11) Change all the occurrences of the word "yes" to "no" in all files present under "/opt/appdata/" directory.
+12) Change all the occurrences of the word "raw" to "processed" in all files present under "/opt/appdata/" directory. It must be a 
+"case-insensitive" replacement, means all words must be replaced like "raw , Raw , RAW" etc.
+13) Create "/opt/appdata" directory
+14) Do not delete any files from "/home/bob/preserved" directory.
+
