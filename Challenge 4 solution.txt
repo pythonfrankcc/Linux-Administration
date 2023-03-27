@@ -36,6 +36,8 @@ file found by find. The semicolon (";") at the end of the command marks the end 
 So, in summary, this command finds all regular files (excluding hidden files and directories) in the /home/bob/preserved directory and copies each 
 file found to the /opt/appdata/files/ directory.
 
+the \; as a wholesome represents the end of the -exec command 
+
 
 #Find the "hidden" files in "/home/bob/preserved" directory and copy them in "/opt/appdata/hidden/" directory
 
@@ -83,6 +85,188 @@ prompting for confirmation. The xargs command passes the output of the grep comm
 files in one go.
 With this modified command, you can find and delete all files in the /opt/appdata directory (including subdirectories) that contain a word ending 
 with the letter "t" (case-sensitive). Please use it with caution as it can be destructive.
+
+
+#Change all the occurrences of the word "yes" to "no" in all files present under "/opt/appdata/" directory
+#Change all the occurrences of the word "raw" to "processed" in all files present under "/opt/appdata/" directory. It must be a "case-insensitive" 
+replacement, means all words must be replaced like "raw , Raw , RAW" etc
+
+[root@centos-host bob]# find /opt/appdata/ -type f -exec sed -i 's/yes/no/g' {} \;
+[root@centos-host bob]# 
+
+#here is a breakdown of the above command
+find /opt/appdata/ -type f: This finds all the regular files (not directories or other special files) in the /opt/appdata/ directory and 
+its subdirectories.
+
+-exec sed -i 's/yes/no/g' {} \;: This executes the sed command on each file found by find. The sed command replaces all occurrences of the 
+word "yes" with "no" in each file (s/yes/no/g), and the -i option tells sed to edit the files in place.
+
+In the command sed -i 's/yes/no/g', sed is a Unix/Linux command-line tool that is used for text manipulation and stands for "stream editor".
+The -i option tells sed to edit the file in place, meaning it will modify the file contents directly instead of just outputting the changes 
+to the console.
+
+The 's/yes/no/g' is a regular expression that specifies the search pattern and replacement string for the sed command. It means:
+
+s: the s command in sed stands for "substitute"
+/yes/: the search pattern to look for in each line of the input file. In this case, it is the string "yes".
+/no/: the replacement string for the search pattern. In this case, it is the string "no".
+/g: the g option at the end of the command means that the substitution should be global, meaning it will replace all occurrences of the 
+search pattern in each line of the file, not just the first occurrence.
+So, the overall meaning of the sed command is to replace all occurrences of the word "yes" with "no" in the input file. The -i option 
+modifies the file in place instead of just printing the changes to the console.
+
+#Change all the occurrences of the word "raw" to "processed" in all files present under "/opt/appdata/" directory. It must be a 
+"case-insensitive" replacement, means all words must be replaced like "raw , Raw , RAW" etc
+
+[root@centos-host bob]# find /opt/appdata/ -type f -exec sed -i 's/raw/processed/gI' {} \;
+
+#a breakdown of the command
+find /opt/appdata/ -type f: This finds all the regular files (not directories or other special files) in the /opt/appdata/ directory 
+and its subdirectories.
+
+-exec sed -i 's/raw/processed/gI' {} \;: This executes the sed command on each file found by find. The sed command replaces all 
+occurrences of the word "raw" with "processed" in each file (s/raw/processed/gI), and the gI options tell sed to do a global and case-insensitive search and replace.
+
+So this command will find all regular files under /opt/appdata/ and replace all occurrences of the word "raw" with "processed" in a 
+case-insensitive manner within those files.
+
+#Create a "tar.gz" archive of "/opt/appdata" directory and save the archive to this file: "/opt/appdata.tar.gz"
+[root@centos-host opt]# history
+    1  clear
+    2  find /opt/appdata/ -type f -exec sed -i 's/raw/processed/gI' {} \;
+    3  pwd
+    4  cd /opt
+    5  pwd
+    6  tar zcvf /opt/appdata.tar.gz /opt/appdata
+    7  clear
+    8  history
+[root@centos-host opt]# 
+
+#the command in question is tar zcvf /opt/appdata.tar.gz /opt/appdata
+#here is a breakdown of what it means
+tar: This is the command for creating and manipulating tape archives.
+
+z: This option tells tar to use gzip compression to create a compressed archive.
+
+c: This option tells tar to create a new archive.
+
+v: This option tells tar to be verbose, meaning it will output the names of the files as it adds them to the archive.
+
+f: This option tells tar to use the following argument as the filename for the archive.
+
+/opt/appdata.tar.gz: This is the filename of the archive to be created.
+
+/opt/appdata: This is the directory that is being archived.
+
+So, the command will create a compressed tar archive named /opt/appdata.tar.gz that contains all the files and directories under 
+the /opt/appdata directory. The -v option makes the command output the list of all files being archived, while the -z option specifies 
+that gzip compression should be used.
+
+In addition to gzip compression, Linux supports several other types of compression that can be used with the tar command. Here are some of 
+the most common compression types:
+
+bzip2: This is a compression algorithm that is used to compress and decompress files. The bzip2 algorithm is slower than gzip, but it typically 
+achieves better compression ratios. To use bzip2 compression with tar, you can use the j option instead of z. For example, the command tar jcvf file.tar.bz2 file/ creates a bzip2-compressed tar archive named file.tar.bz2.
+
+xz: This is a newer compression algorithm that provides better compression ratios than both gzip and bzip2, but is also slower. To use xz 
+compression with tar, you can use the J option instead of z. For example, the command tar Jcvf file.tar.xz file/ creates an xz-compressed tar 
+archive named file.tar.xz.
+
+compress: This is an older compression algorithm that is not as widely used as gzip, bzip2, or xz. To use compress compression with tar, you can 
+use the Z option instead of z. For example, the command tar Zcvf file.tar.Z file/ creates a compress-compressed tar archive named file.tar.Z.
+
+Overall, the choice of compression algorithm depends on your specific requirements for compression ratio, speed, and compatibility with 
+different systems.
+
+
+#Add the "sticky bit" special permission on "/opt/appdata" directory (keep the other permissions as it is).
+[root@centos-host bob]# ls -lsd /opt/appdata
+4 drwxr-xr-x 4 root root 4096 Mar 27 00:05 /opt/appdata
+[root@centos-host bob]# 
+[root@centos-host bob]# 
+[root@centos-host bob]# chmod +t /opt/appdata
+[root@centos-host bob]# ls -lsd /opt/appdata
+4 drwxr-xr-t 4 root root 4096 Mar 27 00:05 /opt/appdata
+[root@centos-host bob]# 
+
+
+In Linux, the sticky bit is a permission bit that can be set on a directory to control who can delete files within that directory. 
+When the sticky bit is set on a directory, only the owner of a file within that directory or the superuser can delete or rename the file.
+
+The sticky bit is represented by the character t in the output of the ls -l command, and is denoted by a 1 in the permissions string for the directory.
+For example, a directory with the permissions drwxrwxrwt has the sticky bit set.
+
+The primary use of the sticky bit is to prevent accidental or malicious deletion of files in a shared directory. 
+For example, the /tmp directory on many Linux systems has the sticky bit set, to prevent regular users from deleting or modifying files 
+belonging to other users.
+
+Additionally, when the sticky bit is set on a directory, it can also help to optimize disk usage. When a file is deleted from a directory 
+without the sticky bit, the space it occupied on the disk is immediately freed. However, when the sticky bit is set, the space occupied by a 
+deleted file is not immediately freed, but is instead marked as available only to the owner of the file or the superuser. This can help to 
+reduce fragmentation and improve performance in situations where many files are being created and deleted within a shared directory.
+
+
+#Make "bob" the "user" and the "group" owner of "/opt/appdata.tar.gz" file.
+
+[root@centos-host bob]# ls -ltra /opt/appdata.tar.gz
+-rw-r--r-- 1 root root 107700 Mar 27 00:28 /opt/appdata.tar.gz
+[root@centos-host bob]# chown bob:bob /opt/appdata.tar.gz
+[root@centos-host bob]# 
+
+#The "user/group" owner should have "read only" permissions on "/opt/appdata.tar.gz" file and "others" should not have any permissions.
+[root@centos-host bob]# chmod 440 /opt/appdata.tar.gz 
+[root@centos-host bob]# ls -ltra /opt/appdata.tar.gz 
+-r--r----- 1 bob bob 107700 Mar 27 00:28 /opt/appdata.tar.gz
+[root@centos-host bob]# 
+
+#Create a "softlink" called "/home/bob/appdata.tar.gz" of "/opt/appdata.tar.gz" file.
+[root@centos-host bob]# ln -s /opt/appdata.tar.gz /home/bob/appdata.tar.gz
+[root@centos-host bob]# 
+[root@centos-host bob]# ln -s /opt/appdata.tar.gz /home/bob/appdata.tar.gz
+[root@centos-host bob]# ls -ltra /home/bob | grep appdata
+lrwxrwxrwx 1 root root     19 Mar 27 00:43 appdata.tar.gz -> /opt/appdata.tar.gz
+[root@centos-host bob]# 
+
+#Create a script called "/home/bob/filter.sh" that filters the word processed and directs the output to a file called /home/bob/filtered.txt
+[root@centos-host bob]# touch filter.sh
+[root@centos-host bob]# nano filter.sh
+[root@centos-host bob]# cat filter.sh 
+#!/bin/bash
+
+tar -xzOf /opt/appdata.tar.gz | grep processed > /home/bob/filtered.txt
+
+#here is what the above script does
+tar: This is the command for creating and manipulating tape archives.
+-x: This option tells tar to extract the contents of the archive.
+-z: This option tells tar to use gzip compression to extract the archive.
+-O: This option tells tar to send the extracted contents to the standard output stream instead of writing them to disk.
+-f: This option specifies the name of the archive file.
+The | symbol is a pipe that redirects the output of the tar command to the grep command. The grep command searches for lines that 
+contain the word "processed" in the output of the tar command, and then outputs those lines to the standard output stream.
+
+Finally, the > symbol is used to redirect the standard output stream to a file named filtered.txt located in the home directory of the 
+user named "bob". The resulting file will contain all the lines from the tar command output that contain the word "processed".
+
+[root@centos-host bob]# 
+#check the permissions and grant execute permissions to the script if there are not assigned
+
+[root@centos-host bob]# chmod +x filter.sh 
+[root@centos-host bob]# ls -ltra filter.sh
+-rwxr-xr-x 1 root root 85 Mar 27 00:50 filter.sh
+[root@centos-host bob]# 
+
+[root@centos-host bob]# cat /etc/passwd | grep bob
+bob:x:1000:1000::/home/bob:/bin/bash
+[root@centos-host bob]# 
+
+#from the above we see that the default shell for bob is bash and thus that is what we will use for the execute
+
+[root@centos-host bob]# bash filter.sh 
+[root@centos-host bob]# cat filtered.txt 
+
+
+
+
 
 
 
