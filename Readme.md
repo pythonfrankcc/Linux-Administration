@@ -82,3 +82,25 @@ directory if doesn't exist).
 13) Create "/opt/appdata" directory
 14) Do not delete any files from "/home/bob/preserved" directory.
 
+*****************************************************************************************************************************************************
+challenge5
+
+1)Create a bash script called "container-stop.sh" under "/home/bob/" which should be able to stop the "myapp" container. It should also display a 
+message "myapp container stopped!"
+2) Add a cron job for the "root" user which should run "container-stop.sh" script at "12am" everyday.
+3) Add a cron job for the "root" user which should run "container-start.sh" script at "8am" everyday.
+4) The "root" account is currently locked on "centos-host", please unlock it.
+5) Make user "root" a member of "wheel" group
+6) Add a local DNS entry for the database hostname "mydb.kodekloud.com" so that it can resolve to "10.0.0.50" IP address.
+7) Set a password for mysql root user to "S3cure#321"
+8) Install "mariadb" database server on this server and "start/enable" its service.
+9) Add an extra IP to "eth1" interface on this system: 10.0.0.50/24
+10) Pull "nginx" docker image.
+11) Create and run a new Docker container based on the "nginx" image. The container should be named as "myapp" and 
+the port "80" on the host should be mapped to the port "80" on the container.
+12) Edit the PAM configuration file for the "su" utility so that this utility only accepts the requests from the 
+users that are part of the "wheel" group and the requests from the users should be accepted immediately, without asking for any password.
+
+
+
+
