@@ -1,0 +1,44 @@
+vi is a text editor that is included in most Unix-based operating systems. It can be a powerful tool for editing text files, but it can also be somewhat intimidating to new users due to its 
+unique interface and commands. Here are some basic commands to help you get started with vi:
+
+Open a file: vi filename.txt
+This command will open the specified file in vi.
+
+Navigate within the file:
+
+Move the cursor one character at a time: h (left), j (down), k (up), l (right)
+Move the cursor to the beginning of the line: 0 (zero)
+Move the cursor to the end of the line: $
+Move the cursor to a specific line: :<line number> (for example, :10 to move to line 10)
+Editing text:
+
+Insert mode: i (insert before cursor), a (insert after cursor), o (insert a new line below current line)
+Delete text: x (delete one character), dd (delete current line), D (delete from cursor to end of line)
+Copy and paste: yy (copy current line), p (paste after cursor)
+Save and quit:
+
+Save changes: :w
+Quit without saving changes: :q
+Save changes and quit: :wq
+These are just a few of the basic commands in vi, but they should be enough to get you started. As you become more familiar with vi, you may want to explore some of its more advanced features, such 
+as search and replace, multiple buffers, and macros.
+
+
+#To change to a different text editor use the following
+To make nano the default text editor in Linux, you can follow these steps:
+
+Open your terminal and type the following command to edit your .bashrc file:
+
+
+nano ~/.bashrc
+Add the following line at the end of the file:
+
+
+export VISUAL=nano
+Save the changes by pressing Ctrl+O and then exit by pressing Ctrl+X.
+
+Reload your .bashrc file by typing the following command:
+
+
+source ~/.bashrc
+Now, when you type the command to edit a file, your default editor will be nano instead of the default vi. For example, if you type edit myfile.txt, nano will open the file instead of vi.

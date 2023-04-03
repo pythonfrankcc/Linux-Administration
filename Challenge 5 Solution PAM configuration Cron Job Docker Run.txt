@@ -269,3 +269,98 @@ echo "myapp container stopped!"
 #Add a cron job for the "root" user which should run "container-stop.sh" script at "12am" everyday.
 #Add a cron job for the "root" user which should run "container-stop.sh" script at "12am" everyday.
 
+#start off by checking for my cron jobs while in root
+[root@centos-host bob]# crontab -l
+no crontab for root
+[root@centos-host bob]# 
+
+
+#run crontab -e
+The crontab -e command in Linux is used to edit the current user's crontab file. The crontab file is a simple text file that contains a list of commands that are scheduled to run at specific times 
+on specific days.
+
+When you run the crontab -e command, it will open the crontab file in the default text editor (which is usually vi or nano). You can then edit the contents of the crontab file to add, modify, or 
+delete scheduled jobs.
+
+Each line in the crontab file represents a scheduled job and contains information about when the job is scheduled to run and what command should be executed. For example, if you want to schedule a 
+job to run a script every day at 3am, you would add a line like this to your crontab file:
+
+
+0 3 * * * /path/to/script.sh
+
+Once you have made your changes to the crontab file, you can save and exit the text editor. The crontab -e command will then update the current user's crontab file with the changes you made.
+
+
+
+The crontab -e command can be useful for adding new scheduled jobs, modifying existing jobs, or deleting jobs that are no longer needed.
+
+To add a cron job for the "root" user to run the "container-stop.sh" script at "12am" every day, you can follow these steps:
+
+Open the crontab file for the root user by running the following command:
+
+
+sudo crontab -e
+If prompted, choose an editor to use. Then, add the following line at the end of the file:
+
+
+0 0 * * * /path/to/container-stop.sh
+Replace "/path/to/container-stop.sh" with the actual path to your script.
+
+This cron job will run the "container-stop.sh" script at "12am" (midnight) every day.
+
+Save the changes and exit the editor.
+
+The cron job is now set up and will automatically run the "container-stop.sh" script at the specified time every day.
+
+
+[root@centos-host bob]# crontab -l
+
+0 0 * * * /home/bob/container-stop.sh
+0 8 * * * /home/bob/container-start.sh
+[root@centos-host bob]# 
+
+#Edit the PAM configuration file for the "su" utility so that this utility only accepts the requests from the users that are part of the "wheel" group and the requests from the users should be 
+accepted immediately, without asking for any password.
+
+
+To configure the PAM configuration file for the "su" utility to only accept requests from users in the "wheel" group and to allow access without a password prompt, you can follow these steps:
+
+Open the PAM configuration file for "su" in your preferred text editor. On most Linux distributions, this file is located at /etc/pam.d/su.
+
+Locate the line that contains the auth keyword and add the following text at the end of the line:
+
+requisite pam_wheel.so use_uid
+This will require users to be a member of the "wheel" group in order to use the "su" utility.
+
+Locate the line that contains the auth keyword and add the following text at the end of the line:
+
+Copy code
+sufficient pam_permit.so
+This will allow users to access the "su" utility without being prompted for a password.
+
+Save the changes to the file and exit the text editor.
+
+The PAM configuration for the "su" utility has now been updated to only accept requests from users in the "wheel" group and to allow access without a password prompt.
+
+
+[root@centos-host bob]# nano /etc/pam.d/su
+[root@centos-host bob]# cat /etc/pam.d/su
+#%PAM-1.0
+auth            required        pam_env.so
+auth            sufficient      pam_rootok.so
+# Uncomment the following line to implicitly trust users in the "wheel" group.
+auth            sufficient      pam_wheel.so trust use_uid
+# Uncomment the following line to require a user to be in the "wheel" group.
+auth            required        pam_wheel.so use_uid
+auth            substack        system-auth
+auth            include         postlogin
+account         sufficient      pam_succeed_if.so uid = 0 use_uid quiet
+account         [success=1 default=ignore] \
+                                pam_succeed_if.so user = vagrant use_uid quiet
+account         required        pam_succeed_if.so user notin root:vagrant
+account         include         system-auth
+password        include         system-auth
+session         include         system-auth
+session         include         postlogin
+session         optional        pam_xauth.so
+[root@centos-host bob]# 
