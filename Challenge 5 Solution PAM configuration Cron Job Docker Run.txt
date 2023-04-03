@@ -87,4 +87,185 @@ Created symlink /etc/systemd/system/multi-user.target.wants/mariadb.service → 
 [root@centos-host bob]# 
 
 #Set a password for mysql root user to "S3cure#321"
+[root@centos-host bob]#  mysqladmin -u root password 'S3cure#321'
+[root@centos-host bob]# 
+#meaning of the above code
+
+mysqladmin: This is the command-line utility for MySQL administration.
+-u root: This specifies that we want to perform the action as the MySQL root user.
+password: This is the option that tells mysqladmin to change the password.
+'S3cure#321': This is the new password that will be set for the MySQL root user. In this example, the password is set to "S3cure#321".
+
+The mysql command itself is used to start the MySQL command-line client, which allows you to interact with the MySQL server. The -u option is used to specify the MySQL user that you want to connect as. For example, if you want to connect as the root 
+user, you would use the command:
+mysql -u root -p
+This would prompt you for the root user's password, and then connect you to the MySQL server.
+
+#The "root" account is currently locked on "centos-host", please unlock it
+#strat by checking if the password is indeed locked
+[root@centos-host bob]# passwd -S root
+root LK 2023-04-02 0 99999 7 -1 (Password locked.)
+[root@centos-host bob]# 
+
+[root@centos-host bob]# usermod -U root
+[root@centos-host bob]# passwd -S root
+root PS 2023-04-02 0 99999 7 -1 (Password set, SHA512 crypt.)
+[root@centos-host bob]# 
+
+#Make user "root" a member of "wheel" group
+#check the groups that root belongs to first
+[root@centos-host bob]# id root
+uid=0(root) gid=0(root) groups=0(root)
+[root@centos-host bob]# 
+[root@centos-host bob]# id root
+uid=0(root) gid=0(root) groups=0(root),10(wheel)
+[root@centos-host bob]# 
+#Here is a brief explanation abaout the difference between the wheel and the sudo group in linux
+In Linux, the wheel group and the sudo group both provide a way to grant users with root-level privileges without actually logging in as the root user. However, there are some differences 
+between these two groups:
+
+The wheel group is a traditional administrative group that has been used in Unix-based systems for many years, while the sudo group is a newer approach that was developed specifically to provide 
+fine-grained control over access to privileged commands.
+
+The wheel group is typically used in combination with the su command, which allows authorized users to switch to the root user account. On the other hand, the sudo command allows authorized users 
+to execute privileged commands without having to switch to the root user account.
+
+The sudo command provides much more fine-grained control over access to privileged commands than the wheel group. With sudo, you can specify exactly which commands a user is allowed to execute and 
+even restrict access to specific options or arguments of a command.
+
+The sudo command also provides better auditing and logging capabilities than the wheel group. When a user executes a privileged command with sudo, a log entry is created that includes details about 
+who executed the command, what command was executed, and when it was executed.
+
+In summary, while both the wheel group and the sudo group can be used to grant users with root-level privileges, the sudo group provides more fine-grained control over access to privileged commands 
+and better auditing capabilities. The wheel group is a more traditional approach that is still used in some systems, but it does not provide the same level of control and auditing as sudo.
+
+#Create and run a new Docker container based on the "nginx" image. The container should be named as "myapp" and the port "80" on the host should be mapped to the port "80" on the container
+[root@centos-host bob]# docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+[root@centos-host bob]# 
+he docker ps command in Linux is used to list the currently running Docker containers on the system. Here's what the command does:
+
+When you run the docker ps command without any options, it lists all the running Docker containers on the system. The output shows the container ID, image name, container name, status, ports, and 
+other details.
+If you add the -a option to the docker ps command (docker ps -a), it will show all containers, including those that are not currently running.
+You can also use the -q option to show only the container IDs of the running containers (docker ps -q).
+The docker ps command can be used with various options to filter and format the output. For example, you can use the --format option to specify a custom output format, or the --filter option to 
+filter containers by their properties.
+
+[root@centos-host bob]# docker pull nginx
+Using default tag: latest
+latest: Pulling from library/nginx
+f1f26f570256: Pull complete 
+7f7f30930c6b: Pull complete 
+2836b727df80: Pull complete 
+e1eeb0f1c06b: Pull complete 
+86b2457cc2b0: Pull complete 
+9862f2ee2e8c: Pull complete 
+Digest: sha256:2ab30d6ac53580a6db8b657abf0f68d75360ff5cc1670a85acb5bd85ba1b19c0
+Status: Downloaded newer image for nginx:latest
+docker.io/library/nginx:latest
+[root@centos-host bob]# 
+
+The docker pull command in Linux is used to download Docker images from a container registry, such as Docker Hub or a private registry. Here's what the command does:
+
+When you run the docker pull command followed by an image name, Docker searches for that image on the default container registry (Docker Hub) and downloads it to your local system.
+If the image does not exist on your local system, the docker pull command downloads it. If the image already exists on your local system, Docker checks if there is a newer version of the image 
+available on the container registry and downloads it if there is.
+The docker pull command also supports the use of a specific tag or version of an image. For example, you can use docker pull ubuntu:18.04 to download the Ubuntu 18.04 image specifically.
+By default, Docker images are downloaded from Docker Hub. However, you can also use the docker pull command to download images from a private registry by specifying the full URL of the registry in 
+the image name, such as docker pull registry.example.com/myimage:latest.
+Overall, the docker pull command is an essential tool for working with Docker images in Linux. It allows you to download and use Docker images from a container registry, making it easy to manage and 
+deploy containerized applications.
+
+#running the image after pulling from docker hub
+[root@centos-host bob]# docker run -d -p 80:80 --name myapp nginx
+875ebaedbf39eea7a84fa45b227cb154a1e0dd23e774056a68e19aabb546d3ec
+[root@centos-host bob]#
+
+he docker run command in Linux is used to create and start a new Docker container based on a specified image. Here's what the docker run -d -p 80:80 --name <container-name> command does:
+
+The -d option specifies that the container should be run in the background as a daemon.
+The -p option specifies the port mapping between the container and the host system. In this case, it maps port 80 of the container to port 80 of the host system.
+The --name option specifies a custom name for the container. Replace <container-name> with the desired name for the container.
+So when you run this command, Docker will do the following:
+
+Search for the specified image locally. If the image is not found, it will be downloaded from the default registry (Docker Hub).
+Create a new container based on the image.
+Map port 80 of the container to port 80 of the host system.
+Run the container in the background as a daemon.
+Assign the specified name to the container.
+Overall, the docker run command is a powerful tool for creating and running Docker containers in Linux. With various options, it allows you to customize the behavior and configuration of your 
+containers and build highly scalable and flexible container-based applications.
+
+[root@centos-host bob]# docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED              STATUS              PORTS                               NAMES
+875ebaedbf39   nginx     "/docker-entrypoint.…"   About a minute ago   Up About a minute   0.0.0.0:80->80/tcp, :::80->80/tcp   myapp
+[root@centos-host bob]# docker ps -a
+CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS         PORTS                               NAMES
+875ebaedbf39   nginx     "/docker-entrypoint.…"   2 minutes ago   Up 2 minutes   0.0.0.0:80->80/tcp, :::80->80/tcp   myapp
+[root@centos-host bob]# docker ps -q
+875ebaedbf39
+[root@centos-host bob]# 
+
+#Create a bash script called "container-start.sh" under "/home/bob/" which should be able to "start" the "myapp" container. It should also display a message "myapp container started!"
+[root@centos-host bob]# touch container-start.sh
+[root@centos-host bob]# ls -ltra | container
+bash: container: command not found
+ls: write error: Broken pipe
+[root@centos-host bob]# ls -ltra | grep container
+-rw-r--r--. 1 root root   0 Apr  3 00:07 container-start.sh
+[root@centos-host bob]# 
+[root@centos-host bob]# nano container.sh
+[root@centos-host bob]# cat container.sh
+#!/usr/bin/env bash
+docker start myapp
+echo "myapp container started!"
+[root@centos-host bob]# 
+
+#here is a brief upgrade from your normal writing of bash shells
+/usr/bin/env is a command that locates the bash interpreter in the system's PATH environment variable. This is used to ensure that the script is interpreted by the correct version of bash.
+
+#In other words, the #!/usr/bin/env bash shebang line tells the system to run the script with the bash interpreter, regardless of the location of the bash executable on the file system.
+
+By using this shebang line, you can ensure that your bash scripts will work correctly on different systems, even if the location of the bash executable is different. It is a best practice to 
+include this shebang line in your bash scripts to ensure portability and compatibility.
+
+
+#the above can be compared to difference between #!/usr/bin/env bash and !#/bin/bash in linux
+he #!/usr/bin/env bash line uses the env command to locate the bash executable in the system's PATH environment variable, while #!/bin/bash explicitly specifies the path to the bash executable on the 
+system.
+
+Using #!/usr/bin/env bash makes the script more portable because it will work on systems where bash is installed in a non-standard location. On the other hand, using #!/bin/bash assumes that bash is 
+installed in the standard location of /bin/bash, which may not always be the case.
+
+The env command used in #!/usr/bin/env bash also allows you to set environment variables for the script by adding them after the interpreter. For example, #!/usr/bin/env VAR=value bash would set the 
+environment variable VAR to value before executing the script with bash.
+
+In general, both #!/usr/bin/env bash and #!/bin/bash can be used interchangeably for most purposes. However, using #!/usr/bin/env bash is considered a best practice for portable scripts that may be 
+run on different systems with different installation paths for bash.
+
+#you have to make the script executable
+[root@centos-host bob]# ls -ltra container-start.sh
+-rw-r--r--. 1 root root 0 Apr  3 00:07 container-start.sh
+[root@centos-host bob]# chmod +x container-start.sh
+[root@centos-host bob]# ls -ltra container-start.sh
+-rwxr-xr-x. 1 root root 0 Apr  3 00:07 container-start.sh
+[root@centos-host bob]# 
+
+#interesting fact chmod+x adds the execute property on all privilege levels, ie, owner group and others
+[root@centos-host bob]# cat container-stop.sh
+#!/usr/bin/env bash
+docker stop myapp
+echo "myapp container stopped!"
+[root@centos-host bob]# 
+
+[root@centos-host bob]# ls -ltra container-stop.sh
+-rw-r--r--. 1 root root 70 Apr  3 00:24 container-stop.sh
+[root@centos-host bob]# chmod +x container-stop.sh
+[root@centos-host bob]# ls -ltra container-stop.sh
+-rwxr-xr-x. 1 root root 70 Apr  3 00:24 container-stop.sh
+[root@centos-host bob]# 
+
+#Add a cron job for the "root" user which should run "container-stop.sh" script at "12am" everyday.
+#Add a cron job for the "root" user which should run "container-stop.sh" script at "12am" everyday.
 
