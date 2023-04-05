@@ -1,0 +1,95 @@
+#Solution for the same
+sudo mkdir /Engineering
+sudo mkdir /Sales
+sudo mkdir /IT
+
+#It is always not advised to create directories directly under the root since there is a security risk, system stability issues, maintainability challenges and is non compliant with the best practices
+#Unless you have very specific requirements and understand the implications
+
+#Create a group for each department. This name should reflect the department name that the group will be assigned.
+sudo groupadd engineering
+sudo groupadd Sales
+sudo groupadd IT
+
+
+#Create an administrative user for each of the departments, The user will have a Bash login shell, The user will belong to the respective group for each department. This will need to be the user’s primary group
+sudo useradd -m -s /bin/bash -G engineering engineering_admin
+sudo useradd -m -s /bin/bash -G Sales Sales_admin
+sudo useradd -m -s /bin/bash -G IT IT_admin
+
+#to use the above users you will have to change the passwd using the passwd command 
+#the -s is what is used to specify the default bash for the user while the -m is used to specify that you want the home directory created for the specific user
+
+#in the case that you want to find the default group of a user, 
+use id -gn <username>
+
+#now changing the default user group of the admins to the respective groups
+sudo usermod -g engineering engineering_admin
+sudo usermod -g Sales sales_admin
+sudo usermod -g IT IT_admin
+
+#after the change you may need to relogin or activate the changes using newgrp
+newgrp
+
+#Create two additional users for each department, The users will have a Bash login shell, The users will belong to their respective group for each department. This will need to be the user’s primary group
+#engineering Team
+
+#sudo useradd -m -s /bin/bash -G engineering engineering1 engineering2
+sudo useradd -m -s /bin/bash -G engineering engineering1 -p <password1>
+sudo useradd -m -s /bin/bash -G engineering engineering2 -p <password1>
+#changing to Engineering as the primary group
+sudo usermod -g Sales engineering1
+sudo usermod -g Sales engineering2
+
+
+#Sales Team
+sudo useradd -m -s /bin/bash -G Sales sales1 -p <password>
+sudo usermod -m -s /bin/bash -G Sales sales2 -p <password>
+#changing to Sales as the primary group
+sudo usermod -g Sales sales1
+sudo usermod -g Sales sales2
+
+#IT group
+sudo useradd -m -s /bin/bash -G IT IT1 -p <password> 
+sudo useradd -m -s /bin/bash -G IT IT2 -p <password>
+
+#changing to IT as the primary group
+sudo usermod -g IT IT1
+sudo usermod -g IT IT2
+
+#Ensure that the owner of each of the directories is the department administrator and the group ownership is the group for each department, The department administrator will have full access to 
+#their respective department directories,Ensure that only the owner of a file in the department’s directory can delete the file. The user will also have ownership of their respective department 
+#folders,Normal users in each department will have full access (Read, Write and Execute) to their respective department folders, The department folders will ONLY be accessible by users/administrators 
+#in each of the respective departments. Ensure that no one else will have permissions to the folders
+
+#Ensure that the owner of each of the directories is the department administrator and the group ownership is the group for each department
+#/Engineering dir
+sudo chown engineering_admin:engineering /Engineering
+sudo chgrp engineering /Engineering1
+
+
+#/Sales dir
+sudo chown sales_admin:Sales /Sales
+sudo chgrp Sales /Sales
+
+#/IT dir
+sudo chown IT_admin:IT /IT
+sudo chgrp IT /IT
+
+#The department administrator will have full access to their respective department directories
+#change of permissions on the /Engineering dir
+sudo chown -R engineering_admin:engineering /Engineering 
+sudo chmod 770 /Engineering
+#the -R is what ensures that the change of ownership is recursive
+
+#for the /Sales dir
+sudo chown -R sales_admin:Sales /Sales
+sudo chmod 770 /Sales
+
+#for the /IT dir
+sudo chown -R IT_admin:IT /IT
+sudo chmod 770 /IT
+
+#so on creation of a dir in linux the owner has rwx but only on the parent and not of the files within the dir, the permissions for those files can change drastically
+#the addition of the sticky bit means that only the owner or the superuser can delete or rename files within that directory
+#chmod +t <dir name>
