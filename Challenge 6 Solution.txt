@@ -93,3 +93,22 @@ sudo chmod 770 /IT
 #so on creation of a dir in linux the owner has rwx but only on the parent and not of the files within the dir, the permissions for those files can change drastically
 #the addition of the sticky bit means that only the owner or the superuser can delete or rename files within that directory
 #chmod +t <dir name>
+
+#Create a document in each of the department directories
+#The ownerships on this file will be the same as the directory it is located in.
+#The document should contain only one line of text that states, “This file contains confidential information for the department.”
+#This file can be read by any user in the department, but can only be modified by the department administrator. No one else has permissions to this file.
+
+cd /IT
+touch IT.txt
+sudo chown IT_admin IT.txt
+#to have the file read by any user in the department but only modified by administrator who is the owner is have read rights for the users, write right for owner and the rest with nothing
+#the order of the permissions are rwx, for example,-rwxr-xr--, means owner has rwx, group has rx, others have r only
+
+sudo chmod 740 IT.txt
+
+#this means that the owner has full permissions, the group has read permissions only and others have nothing
+
+
+
+#replicate the same for the other departments,ie, Sales and Engineering
