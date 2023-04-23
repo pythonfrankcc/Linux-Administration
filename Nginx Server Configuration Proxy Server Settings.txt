@@ -1,0 +1,80 @@
+Nginx is a popular open-source web server and reverse proxy that can be used to improve the performance and reliability of web applications. In this answer, I will provide an overview of 
+how to configure Nginx as a reverse proxy.
+
+What is a reverse proxy?
+
+A reverse proxy is a server that sits between the client and the web server, intercepting incoming requests and forwarding them to the appropriate server. The main benefit of using a reverse 
+proxy is that it can improve the performance and scalability of web applications by distributing requests across multiple servers and caching commonly requested content.
+
+Configuring Nginx as a reverse proxy
+
+Here are the basic steps to configure Nginx as a reverse proxy:
+
+Install Nginx: If you haven't already, you'll need to install Nginx on your server. On Ubuntu or Debian, you can do this with the command sudo apt-get install nginx.
+
+Create a new Nginx configuration file: You'll need to create a new configuration file in the /etc/nginx/sites-available/ directory. For example, you could create a file called myapp.conf with the 
+command sudo nano /etc/nginx/sites-available/myapp.conf.
+
+Configure the server block: In the configuration file, you'll need to define a server block that specifies the domain name or IP address of the incoming requests and the backend server(s) that will 
+handle the requests. Here's an example server block:
+
+server {
+    listen 80;
+    server_name myapp.com;
+
+    location / {
+        proxy_pass http://backend-server;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+In this example, the listen directive specifies the port to listen on (in this case, port 80), the server_name directive specifies the domain name or IP address of the incoming requests, and the 
+location block specifies how to handle requests to the root path (/). The proxy_pass directive specifies the URL of the backend server that will handle the requests (in this case, http://backend-server).
+The proxy_set_header directives add additional headers to the request that are required for the backend server to correctly handle the request.
+
+Enable the configuration file: Once you've created the configuration file, you'll need to enable it by creating a symbolic link from the sites-available directory to the sites-enabled directory. 
+You can do this with the command sudo ln -s /etc/nginx/sites-available/myapp.conf /etc/nginx/sites-enabled/.
+
+Restart Nginx: Finally, you'll need to restart Nginx to apply the new configuration. You can do this with the command sudo systemctl restart nginx.
+
+Advanced configuration
+
+The above steps provide a basic configuration for Nginx as a reverse proxy, but there are many additional options and directives that you can use to customize the behavior of the proxy. Some of the 
+advanced configuration options include:
+
+Load balancing: Nginx can distribute requests across multiple backend servers using a variety of load balancing algorithms.
+
+SSL termination: Nginx can terminate SSL/TLS connections and forward plain HTTP requests to the backend server.
+
+Caching: Nginx can cache commonly requested content to improve performance and reduce load on the backend servers.
+
+Access control: Nginx can restrict access to specific URLs or IP addresses.
+
+Compression: Nginx can compress responses to reduce bandwidth usage.
+
+Conclusion
+
+Configuring Nginx as a reverse proxy can help improve the performance and reliability of web applications by distributing requests across multiple backend servers and caching commonly requested
+
+
+
+
+
+
+#On the Nginx Configuration file that I edited on install for the nginx configuration file
+In an Nginx server configuration file, specifying the server_name as '_' means that the server block will act as a default catch-all server. This configuration means that Nginx will serve requests 
+that do not match any of the other defined server blocks in the configuration file.
+
+For example, consider the following Nginx configuration:
+
+server {
+    listen 80 default_server;
+    server_name _;
+    root /var/www/default;
+}
+In this configuration, the server block will be used as the default server for all HTTP requests that don't match any other server blocks in the configuration file. The root directory for this default 
+server is specified as /var/www/default.
+
+It is important to note that the server_name '_' should only be used in the default server block. Using it in any other server block can lead to unexpected behavior, such as serving content that was 
+not intended for that server block.
