@@ -1,0 +1,13 @@
+#here is what is the use of the tee command
+#The tee command is a useful Linux command that allows you to read from standard input (stdin) and write to both standard output (stdout) and one or more files
+
+$ echo "Hello, World!" | tee file.txt
+Hello, World!
+$ cat file.txt
+Hello, World!
+
+
+
+#in the case that you want to discard the output from a command you have to redirect the output of the tee to /dev/null
+$ echo "This is line 1" | tee > /dev/null
+This is line 1

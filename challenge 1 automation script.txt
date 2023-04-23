@@ -1,0 +1,34 @@
+#!/usr/bin/env bash 
+
+#is generally considered best practice because it allows the system to search for the bash executable in the user's PATH environment variable, rather than relying on 
+#the explicit location of the executable as compared to #!/bin/bash
+
+#disk name
+disk_name="/dev/vdb /dev/vdc"
+vg_name="dba_storage /dev/vdb /dev/vdc"
+lvm_name="volume_1"
+
+# Create physical volume
+sudo pvcreate $disk_name
+
+
+
+# Create volume group
+sudo vgcreate $vg_name $disk_name
+
+# Create logical volume
+sudo lvcreate -l 100%FREE -n $lvm_name $vg_name
+
+# Format logical volume with XFS filesystem
+sudo mkfs.xfs /dev/$vg_name/$lvm_name
+
+# Create mount point
+sudo mkdir /mnt/$lvm_name
+
+# Mount logical volume
+sudo mount /dev/$vg_name/$lvm_name /mnt/$lvm_name
+
+# Add entry to /etc/fstab for persistent mounting
+echo "/dev/$vg_name/$lvm_name /mnt/$lvm_name xfs defaults 0 0" | sudo tee -a /etc/fstab
+
+#the echo is for writing on the terminal but with the use of tee -a command in the pipe used to append the same on the /etc/fstab 
