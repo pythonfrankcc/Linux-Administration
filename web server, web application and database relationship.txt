@@ -22,3 +22,26 @@ request. The client's web browser then renders the HTML content and displays the
 
 In summary, the web server, web application, and database server work together to generate and serve up web pages to clients on the internet. The web server receives HTTP requests from clients, passes 
 them to the web application, which generates dynamic content for the web page and may use a database server to retrieve data, and then the web server sends the generated HTML content back to the client.
+
+
+
+To ensure that the database is available before starting the web application, the administrator can add a dependency on the database server to the HTTP server .service file. Here's how to do it:
+
+Open the HTTP server .service file for editing. This file is typically located in the /etc/systemd/system directory and has a name that ends with ".service". For example, the Apache HTTP server 
+service file on Ubuntu is named apache2.service.
+
+Add a dependency on the database server to the "After" directive in the [Unit] section of the .service file. For example, if the database server service file is named postgresql.service, you would 
+add the following line to the HTTP server .service file:
+
+After=postgresql.service
+
+This line tells systemd that the HTTP server service should start after the postgresql service has started.
+
+Save the changes to the .service file and exit the text editor.
+
+Reload the systemd daemon to pick up the changes to the .service file:
+
+systemctl daemon-reload
+
+After making these changes, the HTTP server service should not start until the database server service has started. This ensures that the database is available before the web application starts and 
+tries to access it.
