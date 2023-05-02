@@ -51,7 +51,7 @@ limit of "100MB" and a "hard" limit of "500MB" on "/data" partition
 10) Create a user called "david" , change his login shell to "/bin/zsh" and set "D3vUd3raaw" password for this user
 11) Make user "david" a member of "admins" group
 12) Create a user called "natasha" , change her login shell to "/bin/zsh" and set "DwfawUd113" password for this user
-13) Make user "natasha" a member of "admins" grou
+13) Make user "natasha" a member of "admins" group
 14) Give some additional permissions to "admins" group on "/data" directory so that any user who is the member the 
 "admins" group has "full permissions" on this directory
 15) Make sure "/data" directory is owned by user "bob" and group "devs" and "user/group" owner has "full" permissions 
