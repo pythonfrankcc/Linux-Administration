@@ -1,0 +1,44 @@
+#common linux hardening tasks
+
+1)Disable Unused Services:
+Identify and disable any unnecessary or unused services running on the system.
+Use the appropriate commands or configuration files for your Linux distribution to disable services (e.g., systemctl disable for systemd-based distributions or editing configuration files like /etc/init.d/ or /etc/xinetd.d/).
+
+2)Apply Security Updates:
+Regularly update the system with the latest security patches and updates.
+Use the package manager specific to your Linux distribution (apt, yum, zypper, etc.) to update installed packages and keep the system up to date.
+
+3)Configure Firewalls:
+Set up a firewall to filter network traffic and protect the system.
+Use firewall management tools like iptables or firewalld to define rules and policies that allow only necessary incoming and outgoing connections.
+
+4)Enable Logging and Monitoring:
+Configure logging to record system events, errors, and security-related activities.
+Ensure that the logs are stored securely and regularly monitored for any suspicious or unauthorized activities.
+Utilize log management tools and techniques to centralize and analyze log data effectively.
+
+5)Harden File Permissions:
+Review and modify file permissions to restrict access to sensitive system files and directories.
+Set appropriate ownership and permissions using commands such as chmod and chown to ensure that only authorized users or groups have access to critical files.
+
+6)Implement User Account Management:
+Regularly review and audit user accounts and privileges.
+Remove or disable any unnecessary or unused user accounts.
+Implement strong password policies, as discussed in a previous response, to enforce password complexity, expiration, and history.
+
+7)Secure Remote Access:
+Use Secure Shell (SSH) protocol for remote access and disable insecure protocols such as Telnet or FTP.
+Configure SSH to use strong encryption algorithms, disable root login, and use key-based authentication instead of password authentication.
+Implement additional security measures like fail2ban to protect against brute-force attacks.
+
+8)Enable File System Encryption:
+If required, enable file system encryption to protect sensitive data at rest.
+Linux distributions provide tools like LUKS (Linux Unified Key Setup) or eCryptfs to encrypt partitions or directories.
+
+9)Implement Intrusion Detection/Prevention System (IDS/IPS):
+Set up an IDS/IPS solution to detect and prevent network-based attacks.
+Configure the IDS/IPS rules and policies based on known attack patterns or custom requirements.
+
+10)Regularly Backup and Test Restore:
+Implement a regular backup strategy to ensure critical data can be recovered in case of a system compromise or failure.
+Test the restore process periodically to verify the integrity and reliability of backups.
