@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+#script to check the disk utilization of the root filesysytem
+
+#set the threshold value for disk utilzation in %
+threshold=90
+
+#get the disk utilization percentage for the root filesystem
+diskUsage=$(df -h / | awk 'NR==2 {print $5}' | tr -d '%')
+
+# awk 'NR==2 {print $5}'>> This prints the 5th column which represents the % utilization from the second line of output
+# tr -d '%'>>This removes the percentage symbol from the extracted value
+
+
+# Compare disk utilization with the threshold
+if (( diskUsage > threshold )); then
+	# Disk utilization is above the threshold, send an email alert
+	subject="Disk Utilization Alert: Above ${threshold}%"
+	message="The disk utilization is currently at ${diskUsage}%. Please take necessary Actions "
+	
+	# Configure your email settings
+	sender="sender@example.com"
+	recipient="recipient@example.com"
+	smtpServer="smtp.example.com"
+	smtpPort="587"
+	smtpUser="smtp_username"
+	smtpPassword="smtp_password"
+	
+	# Send email using the "mailx" command
+	echo -e "Subject: $subject\n\n$message" | mailx -r "$sender" -s "$subject" -S smtp="$smtpServer:$smtpPort" \
+        -S smtp-use-starttls -S smtp-auth=login -S smtp-auth-user="$smtpUser" -S smtp-auth-password="$smtpPassword" "$recipient"
+fi
+
+#echo -e "Subject: $subject\n\n$message" | mailx -r "$sender" -s "$subject" -S smtp="$smtpServer:$smtpPort" \
+        -S smtp-use-starttls -S smtp-auth=login -S smtp-auth-user="$smtpUser" -S smtp-auth-password="$smtpPassword" "$recipient"
+		#This constructs the email by echoing the subject and message and pipes it as input to the "mailx" command.
+#-r "$sender":specifies the senders email address
+#-s "$subject": sets the subject of the email
+#-S smtp="$smtpServer:$smtpPort": specifies the SMTP server and port to be used for sending the email
+#-S smtp-use-starttls: enables the use of STARTTLS for secure communication with the SMTP server
+#-S smtp-auth=login: Specifies the authentication mechanism as login
+#-S smtp-auth-user="$smtpUser: sets the username for the SMTP authentication
+#-S smtp-auth-password="$smtpPassword: sets the password for SMTP authentication
+#"$recipient: specifies the recipient's email address
+

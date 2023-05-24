@@ -1,0 +1,50 @@
+#when to use double parentheses in linux bash scripting
+
+
+>> in Linux bash scripting the use of double parentheses is for arithmetic evaluation and comparisons in conditional statements. Here are a few scenarios of the saeme:
+a) Arithmetic comparisons
+Allows for arithemetic comparisons within conditional statements
+num1=5
+num2=10
+if (( $num1 < $num2 )); then
+	echo "$num1 is less than $num2"
+fi
+
+
+
+b) Arithmetic operations
+if (( $num2%2 == 0 )); then
+	echo"$num2 is even"
+fi
+
+
+
+c) Increements and Decreements
+num3 = 20
+
+(( $num3++ ))
+
+if (($num3 > 5 ));then
+	echo "$num3 is greater than 5"
+fi
+
+
+#the use of single parentheses in linux includes command substitution, subshell creation, groupings within conditional statements
+a) Command substitution
+result=$(command)
+
+if ["$result" = "expected_value"];then
+	echo "The result is as expected"
+fi
+
+
+b) Create a subshell within a conditional statement. A subshell is a child shell created within the main shell, and it is useful for grouping commands or isolating variables
+(command1; command2)
+if(command3);then
+	echo "command3 succeeded"
+fi
+
+c) Groupings and precedence
+if [ "$var1" = "value1" ] && ( [ "$var2" = "value2" ] || [ "$var3" = "value3" ] ); then
+	echo "Conditions Satisfied"
+fi
