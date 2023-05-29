@@ -1,4 +1,5 @@
 How TCP and UDP work in a linux with troubleshooting explained:https://unix.stackexchange.com/questions/261360/icmp-port-unreachable-error-even-if-port-is-open
+Best practise for cloning to prevent mismatches in disk: https://unix.stackexchange.com/questions/644708/how-can-i-prevent-disk-uuid-mismatch-when-cloning-a-machine
 
 
 
