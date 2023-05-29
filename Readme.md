@@ -1,3 +1,7 @@
+How TCP and UDP work in a linux with troubleshooting explained:https://unix.stackexchange.com/questions/261360/icmp-port-unreachable-error-even-if-port-is-open
+
+
+
 *****************************************************************************************************************************************************
 Challenge1
 The database server called centos-host is running short on space! You have been asked to add an LVM volume for the Database team using
