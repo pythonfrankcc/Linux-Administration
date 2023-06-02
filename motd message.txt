@@ -1,0 +1,10 @@
+#create a banner motd on linux
+
+
+#Switch to the root user or use a superuser command such as sudo
+#Navigate to the /etc
+#Check if a motd file already exists in the directory. If it does, you may want to back it up before making any changes.
+
+#use a text editor eg vi, nano or vim to edit or create the motd message
+
+#this is the message your user will always be welcomed to whenever they log into a linux system
