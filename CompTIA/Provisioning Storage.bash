@@ -125,3 +125,19 @@ unused devices: <none>
 
 
 #SAN/NAS
+#Two most common network filesystems include: NFS and SMB
+#NFS was originally created by Sun Microsystems and the primary configuration for NFS server can be found in /etc/exports.
+#This is the file you use to specify what directories you want to share to the NFS clients. The syntax is as follows
+#Directory hostname(options)
+/usr/share/doc jupiter(rw) mars(ro)
+
+
+#SMB
+#This was invented by IBM
+#Both SMB and NFS are example of DFS, which is, used to share files and directories across a network.
+#CIFS may be used in conjuction with SMB, it is a SMB protocal famous in windows OS
+#the linux software that allows SMB sharing is called SAMBA.The condiguration of SAMBA is the /etc/SAMBA/smb.conf
+
+
+#storage hardware
+#fcstat: you can see information about storage devices attached to Fibre Channel
